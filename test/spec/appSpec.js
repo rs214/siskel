@@ -20,6 +20,7 @@ describe('Siskel', function() {
     // instantiating a collection invokes sort; reset state
     Movies.prototype.sort.reset();
     model = collection.first();
+    console.log(collection);
   });
 
   afterEach(function() {

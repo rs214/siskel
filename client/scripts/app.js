@@ -1,3 +1,4 @@
+//Model
 var Movie = Backbone.Model.extend({
 
   defaults: {
@@ -5,27 +6,33 @@ var Movie = Backbone.Model.extend({
   },
 
   toggleLike: function() {
-    // your code here
+    this.set('like', false);
   }
 
 });
 
+//Actual Collection Itself
 var Movies = Backbone.Collection.extend({
 
   model: Movie,
 
   initialize: function() {
-    // your code here
+    this.on('change', this.sortByField);
   },
 
   comparator: 'title',
 
   sortByField: function(field) {
-    // your code here
+    this.sort();
+    if (this.comparator !== field) {
+      this.comparator = field;
+    }
   }
 
 });
 
+
+//View
 var AppView = Backbone.View.extend({
 
   events: {
@@ -45,7 +52,7 @@ var AppView = Backbone.View.extend({
   }
 
 });
-
+//Another View - holds the like button, title year and rating
 var MovieView = Backbone.View.extend({
 
   template: _.template('<div class="movie"> \
@@ -58,7 +65,7 @@ var MovieView = Backbone.View.extend({
                         </div>'),
 
   initialize: function() {
-    // your code here
+    this.on('change', this.render());
   },
 
   events: {
@@ -66,7 +73,8 @@ var MovieView = Backbone.View.extend({
   },
 
   handleClick: function() {
-    // your code here
+
+    this.model.toggleLike();
   },
 
   render: function() {
@@ -76,10 +84,11 @@ var MovieView = Backbone.View.extend({
 
 });
 
+//Another View - Holds actual movies themselves title year etc
 var MoviesView = Backbone.View.extend({
 
   initialize: function() {
-    // your code here
+    this.on('change', this.render());
   },
 
   render: function() {
